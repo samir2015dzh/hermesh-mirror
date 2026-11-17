@@ -22,20 +22,7 @@ jobs:
           cd upstream.git
           git push "https://x-access-token:${{ secrets.SYNC_TOKEN }}@github.com/${{ github.repository }}.git" '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*'
 
-      - name: Sync fork samir2015dzh/hermesh via merge-upstream
-        if: ${{ env.SYNC_TOKEN != '' }}
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
-        run: |
-          status=$(curl -sS -o resp.json -w '%{http_code}' -X POST \
-            -H "Authorization: Bearer ${GH_TOKEN}" \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/samir2015dzh/hermesh/merge-upstream \
-            -d '{"branch":"main"}')
-          echo "HTTP ${status}"
-          cat resp.json
-          if [ "${status}" != "200" ]; then
-            echo "merge-upstream failed for samir2015dzh/hermesh (main)"
-            exit 1
-          fi
+# Fork sync removed 2026-11-17 (owner ruling): samir2015dzh/hermesh no longer
+# tracks upstream continuously. Upstream intake is selective, by work order in
+# the hermesh-handover repo. This workflow only keeps the anti-deletion mirror
+# of upstream branches/tags.
